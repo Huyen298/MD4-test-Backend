@@ -26,13 +26,6 @@ public class ProvinceController {
     public Iterable<Country> countries(){
         return countryService.findAll();
     }
-//
-//    @GetMapping("")
-//    public ModelAndView showList(){
-//        ModelAndView modelAndView = new ModelAndView("listProvince");
-//        modelAndView.addObject("province", provinceService.findAll());
-//        return modelAndView;
-//    }
 
     @GetMapping("/province")
     public ResponseEntity<Iterable<Province>> getAll(){
@@ -44,6 +37,12 @@ public class ProvinceController {
     public ResponseEntity<Province> createNewProvince(@RequestBody Province province){
         provinceService.save(province);
         return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @GetMapping("/country")
+    public ResponseEntity<Iterable<Country>> getCountry(){
+        Iterable<Country> countries = countryService.findAll();
+        return new ResponseEntity<>(countries, HttpStatus.OK);
     }
 
     @DeleteMapping("/province/{id}")
@@ -62,5 +61,14 @@ public class ProvinceController {
         }
         provinceService.save(province);
         return new ResponseEntity<>(provinceOptional.get(), HttpStatus.OK);
+    }
+
+    @GetMapping("/province/{id}")
+    public ResponseEntity<Province> findById(@PathVariable Long id){
+        Optional<Province> provinceOptional = provinceService.findById(id);
+        if (!provinceOptional.isPresent()){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(provinceOptional.get(),HttpStatus.OK);
     }
 }
